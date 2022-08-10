@@ -12,7 +12,7 @@ class App extends React.Component {
                 q: term
             }
         });
-        this.setState({ videos: response.data.items});
+        this.setState({ videos: response.data.items });
     };
 
     render() {
@@ -23,7 +23,6 @@ class App extends React.Component {
         </div>
         )
     }
-
 }
 
 export default App;
