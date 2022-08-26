@@ -5,12 +5,19 @@ import VideoList from "./VideoList";
 import VideoDetail from "./VideoDetail";
 import youtube_details from "../apis/youtube_details";
 
+
+function failureCallback(error) {
+  console.log(error);
+}
 class App extends React.Component {
   state = { videos: [], selectedVideo: null, videoDetails: [] };
 
   //componentDidMount() {
   //  this.onTermSubmit('classical music')
   //}
+  successCallback(result) {
+    console.log(result.data.items[0].contentDetails['duration']);
+  };
 
   onTermSubmit = async (term) => {
     const response = await youtube.get("/search", {
@@ -18,15 +25,16 @@ class App extends React.Component {
         q: term,
       },
     });
+
     const details = response.data.items.map(async (item) => {
       const response_detail = await youtube_details.get("/videos", {
         params: {
           id: item.id.videoId,
         },
-      });
+      }).then(this.successCallback, failureCallback);
       return response_detail
     }); 
-    console.log(details)
+
     this.setState({
       videos: response.data.items,
       selectedVideo: response.data.items[0],
