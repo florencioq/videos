@@ -18,8 +18,8 @@ class App extends React.Component {
         q: term,
       },
     });
-    const details = response.data.items.map((item) => {
-      const response_detail = youtube_details.get("/videos", {
+    const details = response.data.items.map(async (item) => {
+      const response_detail = await youtube_details.get("/videos", {
         params: {
           id: item.id.videoId,
         },
