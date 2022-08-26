@@ -3,13 +3,14 @@ import SearchBar from "./SearchBar";
 import youtube from "../apis/youtube";
 import VideoList from "./VideoList";
 import VideoDetail from "./VideoDetail";
+import youtube_details from "../apis/youtube_details";
 
 class App extends React.Component {
-  state = { videos: [], selectedVideo: null };
+  state = { videos: [], selectedVideo: null, videoDetails: [] };
 
-  componentDidMount() {
-    this.onTermSubmit('classical music')
-  }
+  //componentDidMount() {
+  //  this.onTermSubmit('classical music')
+  //}
 
   onTermSubmit = async (term) => {
     const response = await youtube.get("/search", {
@@ -17,9 +18,19 @@ class App extends React.Component {
         q: term,
       },
     });
+    const details = response.data.items.map((item) => {
+      const response_detail = youtube_details.get("/videos", {
+        params: {
+          id: item.id.videoId,
+        },
+      });
+      return response_detail
+    }); 
+    console.log(details)
     this.setState({
       videos: response.data.items,
       selectedVideo: response.data.items[0],
+      videoDetails: details,
     });
   };
 
@@ -40,6 +51,7 @@ class App extends React.Component {
               <VideoList
                 onVideoSelect={this.onVideoSelect}
                 videos={this.state.videos}
+                details={this.state.videoDetails}
               />
             </div>
           </div>
