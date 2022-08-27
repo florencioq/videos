@@ -9,14 +9,17 @@ import youtube_details from "../apis/youtube_details";
 function failureCallback(error) {
   console.log(error);
 }
+
 class App extends React.Component {
   state = { videos: [], selectedVideo: null, videoDetails: [] };
 
   //componentDidMount() {
   //  this.onTermSubmit('classical music')
   //}
+
   successCallback(result) {
-    console.log(result.data.items[0].contentDetails['duration']);
+    let duration = result.data.items[0].contentDetails['duration'];
+    console.log(result.data.items[0].id, duration);
   };
 
   onTermSubmit = async (term) => {
@@ -33,7 +36,7 @@ class App extends React.Component {
         },
       }).then(this.successCallback, failureCallback);
       return response_detail
-    }); 
+    });
 
     this.setState({
       videos: response.data.items,
